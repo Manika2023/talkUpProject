@@ -1,0 +1,46 @@
+{% extends 'meetings_app/base.html' %}
+{% load static %}
+{% block title %}login - Video Conferencing App{% endblock %}
+
+{% block  content %}
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row shadow-lg p-4 bg-white rounded" style="max-width: 1000px; width: 100%;">
+      <!-- Image section -->
+      <div class="col-md-6 p-0 d-none d-md-block">
+        <img src="{% static 'meetings_app/images/login-bg.avif' %}" class="img-fluid h-100 rounded-start" alt="Login Image" style="object-fit: cover;">
+      </div>
+
+      <!-- Form section -->
+      <div class="col-md-6 d-flex flex-column justify-content-center p-4">
+        <h2 class="text-center mb-4">Welcome Back!</h2>
+        <form action="{% url 'login' %}" method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+          <div class="text-center mt-3">
+            {% if success %}
+            <p class="text-success"><b>{{ success }}</b></p>
+            {% endif %}
+            {% if error %}
+            <p class="text-danger">{{ error }}</p>
+            {% endif %}
+          </div>
+        </form>
+        <div class="text-center mt-3">
+          Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}

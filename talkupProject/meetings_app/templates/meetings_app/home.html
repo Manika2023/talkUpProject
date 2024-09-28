@@ -1,0 +1,62 @@
+{% extends 'meetings_app/base.html' %}
+{% load static %}
+
+{% block title %}TalkUp institute{% endblock %}
+{% block content %}
+
+<div class="d-flex flex-column min-vh-100">
+
+     <!-- Header -->
+     <div class="bg-white shadow">
+         <div class="container py-4">
+             <h1 class="display-4 text-center text-dark">Welcome to TalkUp</h1>
+             <p class="text-center text-muted">Collaborate and create together</p>
+         </div>
+     </div>
+ 
+     <!-- Main Content -->
+     <main class="flex-grow-1 container py-6"> <!-- Padding for spacing -->
+        
+         <div class="bg-light rounded-lg shadow-lg p-4 mt-4">
+             <h2 class="h4 font-weight-bold text-dark">Join the Collaboration</h2>
+             <p class="mt-2 text-muted">Start creating your masterpiece with our unique tools.</p>
+            
+             <!-- Intro Section for Video Conferencing App -->
+             <div class="intro mt-4 text-center">
+                 <h1 class="h5 font-weight-bold text-dark">Welcome to my Awesome Video Conferencing App!</h1>
+                 <h2 class="h6 text-muted">For all your professional and personal needs!</h2>
+                 <div class="mt-4">
+                     <a href="{% url 'login' %}" class="btn btn-primary me-2">Sign In</a>
+                     <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
+                 </div>
+             </div>
+            </div>
+        
+         <section class="mt-6 py-5">
+             <h1 class="font-weight-bold text-white">Features</h1>
+             <div class="row mt-4">
+                 <div class="col-12 col-md-4 mb-4">
+                     <div class="bg-white rounded-lg shadow p-4">
+                         <h3 class="font-weight-bold text-dark">Real-time Collaboration</h3>
+                         <p class="text-muted">Work together with your friends in real time.</p>
+                     </div>
+                 </div>
+                 <div class="col-12 col-md-4 mb-4">
+                     <div class="bg-white rounded-lg shadow p-4">
+                         <h3 class="font-weight-bold text-dark">Creative Tools</h3>
+                         <p class="text-muted">Use various drawing tools to express your creativity.</p>
+                     </div>
+                 </div>
+                 <div class="col-12 col-md-4 mb-4">
+                     <div class="bg-white rounded-lg shadow p-4">
+                         <h3 class="font-weight-bold text-dark">User-friendly Interface</h3>
+                         <p class="text-muted">Enjoy a smooth and intuitive user experience.</p>
+                     </div>
+                 </div>
+             </div>
+         </section>
+     </main>
+ 
+</div>
+
+{% endblock content %}

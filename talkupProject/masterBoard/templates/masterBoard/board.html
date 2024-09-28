@@ -1,0 +1,203 @@
+{% extends 'meetings_app/base.html' %}
+{% load static %}
+{% block title %}masterBoard Collaboration{% endblock %}
+{% block style %}
+#canvas {
+    border: 6px solid black;
+    cursor: crosshair;
+}
+body{
+    background:white;
+}
+{% endblock style %}
+ {% block content %}
+ 
+
+
+    <div class="container mt-5">
+        <h1 class="text-center">MasterBoard Collaboration - Paint & Chat</h1>
+
+        <!-- Message Board -->
+        <div class="card">
+            <div class="card-body">
+                <div id="message-box" class="p-3 border bg-light" style="height: 300px; overflow-y: scroll;"></div>
+            </div>
+            <div class="card-footer">
+                <input type="text" id="input-message" class="form-control" placeholder="Enter message...">
+                <button id="send-btn" class="btn btn-primary mt-3 w-100">Send</button>
+            </div>
+        </div>
+
+        <!-- Canvas Tools -->
+        <div class="mt-5">
+            <h3>Draw on the Board:</h3>
+
+            <!-- Drawing Mode Selector -->
+            <div class="mt-3">
+                <label for="drawing-mode">Choose Mode:</label>
+                <select id="drawing-mode" class="form-select">
+                    <option value="freehand">Freehand Drawing</option>
+                    <option value="rectangle">Rectangle</option>
+                    <option value="square">Square</option>
+                </select>
+            </div>
+
+            <!-- Fill Mode Checkbox -->
+            <div class="mt-3">
+                <label for="fill-checkbox">Fill Shape:</label>
+                <input type="checkbox" id="fill-checkbox">
+            </div>
+
+            <!-- Color Picker for drawing and fill -->
+            <div class="mt-3">
+                <label for="color-picker">Choose Color:</label>
+                <input type="color" id="color-picker" value="#000000">
+            </div>
+
+            <!-- Canvas element -->
+            <canvas id="canvas" width="800" height="400"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket setup
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/masterboard/');
+
+        // Message Box Setup
+        const messageBox = document.getElementById('message-box');
+        const messageInput = document.getElementById('input-message');
+        const sendBtn = document.getElementById('send-btn');
+
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+
+            // Handle messages
+            if (data.message) {
+                const message = data.message;
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('alert', 'alert-secondary', 'my-1');
+                messageElement.textContent = message;
+                messageBox.appendChild(messageElement);
+                messageBox.scrollTop = messageBox.scrollHeight;
+            }
+
+            // Handle drawing and shapes
+            if (data.draw_action) {
+                const { x, y, lastX, lastY, color, shape, fill } = data.draw_action;
+                if (shape === 'rectangle' || shape === 'square') {
+                    drawShape(lastX, lastY, x, y, shape, color, fill);  // Draw rectangle/square with fill
+                } else {
+                    drawLine(lastX, lastY, x, y, color);  // Pass the color to the drawLine function for freehand
+                }
+            }
+        };
+
+        // Send messages
+        sendBtn.onclick = function() {
+            const message = messageInput.value;
+            socket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInput.value = '';
+        };
+
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendBtn.click();
+            }
+        });
+
+        // Canvas Drawing Setup
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let drawing = false;
+        let lastX = 0, lastY = 0;
+        let drawColor = '#000000';  // Default color is black
+
+        // Color Picker
+        const colorPicker = document.getElementById('color-picker');
+
+        // Update drawing color when the user selects a new color
+        colorPicker.addEventListener('input', function(e) {
+            drawColor = e.target.value;
+        });
+
+        // Drawing mode selector (Freehand, Rectangle, Square)
+        const drawingMode = document.getElementById('drawing-mode');
+
+        // Fill Checkbox
+        const fillCheckbox = document.getElementById('fill-checkbox');
+
+        // Handle mouse events for drawing on the canvas
+        canvas.addEventListener('mousedown', function(e) {
+            drawing = true;
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        });
+
+        canvas.addEventListener('mouseup', function(e) {
+            if (!drawing) return;
+
+            const x = e.offsetX;
+            const y = e.offsetY;
+            const shape = drawingMode.value;
+            const fill = fillCheckbox.checked;
+
+            if (shape === 'rectangle' || shape === 'square') {
+                // Send shape drawing action via WebSocket
+                socket.send(JSON.stringify({
+                    'draw_action': {
+                        'x': x,
+                        'y': y,
+                        'lastX': lastX,
+                        'lastY': lastY,
+                        'color': drawColor,
+                        'shape': shape,
+                        'fill': fill
+                    }
+                }));
+
+                // Draw shape locally on the canvas
+                drawShape(lastX, lastY, x, y, shape, drawColor, fill);
+            } else {
+                // Send freehand drawing action via WebSocket
+                socket.send(JSON.stringify({
+                    'draw_action': {
+                        'x': x,
+                        'y': y,
+                        'lastX': lastX,
+                        'lastY': lastY,
+                        'color': drawColor
+                    }
+                }));
+
+                drawLine(lastX, lastY, x, y, drawColor);
+            }
+
+            drawing = false;
+        });
+
+        // Function to draw a line on the canvas
+        function drawLine(x1, y1, x2, y2, color) {
+            ctx.strokeStyle = color || drawColor;  // Use the color passed, or default to current color
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        // Function to draw a rectangle or square on the canvas
+        function drawShape(x1, y1, x2, y2, shape, color, fill) {
+            ctx.strokeStyle = color;
+            ctx.fillStyle = fill ? color : 'transparent';
+            const width = x2 - x1;
+            const height = shape === 'square' ? width : y2 - y1;
+
+            if (fill) {
+                ctx.fillRect(x1, y1, width, height);
+            }
+            ctx.strokeRect(x1, y1, width, height);
+        }
+    </script>
+    {% endblock content %}

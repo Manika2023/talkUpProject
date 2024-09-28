@@ -1,0 +1,17 @@
+{% extends 'meetings_app/base.html' %}
+{% load static %}
+
+{% block title %}TalkUp institute in delhi NCR{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100 "> <!-- Added vh-100 for full height  for contrast -->
+ <div class="intro text-center text-white"> <!-- Center text and set text color -->
+<h1>Welcome to my Awesome Video Conferencing App!</h1>
+<h2>For all your professional and personal needs!</h2>
+<!-- Create signup and signin buttons -->
+<div class="btns d-flex flex-column m-4">
+     <a href="{% url 'login' %}" class="btn btn-primary my-2 p-2">Sign In</a>
+     <a href="{% url 'register' %}" class="btn btn-primary p-2">Sign Up</a>
+</div>
+</div>
+</div>
+{% endblock content %}

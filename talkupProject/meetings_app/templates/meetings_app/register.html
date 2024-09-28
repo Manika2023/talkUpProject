@@ -1,0 +1,53 @@
+{% extends 'meetings_app/base.html' %}
+{% load static %}
+{% block title %}Signup - Video Conferencing App{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row shadow-lg p-4 bg-white rounded" style="max-width: 1000px; width: 100%;">
+      <!-- Image section -->
+      <div class="col-md-6 p-0 d-none d-md-block">
+        <img src="{% static 'meetings_app/images/signUp-bg.avif' %}" class="img-fluid h-100 rounded-start" alt="Signup Image" style="object-fit: cover;">
+      </div>
+
+      <!-- Form section -->
+      <div class="col-md-6 d-flex flex-column justify-content-center p-4">
+        <h2 class="text-center mb-4">Create an Account</h2>
+        <form action="{% url 'register' %}" method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter your first name" required>
+          </div>
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter your last name" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+          </div>
+          <div class="mb-3">
+            <label for="password1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password1" name="password1" placeholder="Create a password" required>
+          </div>
+          <div class="mb-3">
+            <label for="password2" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm your password" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Signup</button>
+          </div>
+          <div class="text-center mt-3">
+            {% if error %}
+            <p class="text-danger">{{ error }}</p>
+            {% endif %}
+          </div>
+        </form>
+        <div class="text-center mt-3">
+          Already have an account? <a href="{% url 'login' %}">Sign in</a>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'meetings_app/base.html' %}
+{% load static %}
+{% block title %}Video Conference{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0" style="max-width: 450px; width: 100%;">
+      <div class="card-body text-center p-4">
+        <!-- User Avatar -->
+        <img src="{% static 'meetings_app/images/avatar.jpg' %}" alt="User Avatar" class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+
+        <h1 class="card-title mb-3" style="font-size: 1.5rem;">Welcome, {{ name }}!</h1>
+
+        <!-- New Meeting Button -->
+        <a href="{% url 'meeting' %}" class="btn btn-primary btn-lg mb-2 w-100">New Meeting</a>
+
+        <!-- Join Meeting Button -->
+        <a href="{% url 'join' %}" class="btn btn-success btn-lg mb-2 w-100">Join Meeting</a>
+
+        <!-- Logout Button -->
+        <a href="{% url 'logout' %}" class="btn btn-danger btn-lg w-100">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

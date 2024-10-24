@@ -1,0 +1,25 @@
+<!-- quiz/templates/quiz/quiz_results.html -->
+{% extends 'meetings_app/base.html' %}
+
+{% block title %}Quiz Results{% endblock %}
+
+{% block content %}
+<div class="container vh-100 d-flex flex-column justify-content-center align-items-center text-dark" style="background-color: #87CEEB;">
+    <h2 class="mb-4">{{ quiz.title }} - Results</h2>
+    <div class="card bg-light text-dark shadow" style="border-radius: 15px; max-width: 600px; width: 100%;">
+        <div class="card-body text-center">
+            <p class="card-text">Your score: <strong>{{ score }}</strong> out of <strong>{{ total_questions }}</strong></p>
+
+            {% if score == total_questions %}
+                <p class="text-success">Great job! You answered all questions correctly!</p>
+            {% elif score > passing_score %}
+                <p class="text-info">Good effort! You passed the quiz.</p>
+            {% else %}
+                <p class="text-danger">You need to improve your score!</p>
+            {% endif %}
+
+            <a href="{% url 'quiz_list' %}" class="btn btn-primary mt-4">Back to Quizzes</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

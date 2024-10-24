@@ -44,6 +44,14 @@
             <a class="nav-link text-white" href="{% url 'board' %}">masterBoard</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'quiz_list' %}">Quizzes</a>
+          </li>
+          {% if user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+            </li>
+          {% endif %}
+          <li class="nav-item">
             <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
           </li>
         {% else %}

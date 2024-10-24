@@ -1,0 +1,15 @@
+{% extends "meetings_app/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+     <div class="container vh-100 d-flex flex-column justify-content-center align-items-center text-dark">
+          <h2 class="mb-4">{{ quiz.title }}</h2>
+          <div class="alert alert-info text-center" style="max-width: 600px; width: 100%;">
+               <p>The quiz will start at <strong>{{ quiz.start_time|date:"F j, Y, g:i a" }}</strong>. Please come back then.</p>
+          </div>
+          <a href="{% url 'quiz_list' %}" class="btn btn-primary mt-4">Back to Quizzes</a>
+     </div>
+     
+</div>
+{% endblock content %}
+    

@@ -1,0 +1,28 @@
+<!-- quiz/templates/quiz/quiz_list.html -->
+{% extends 'meetings_app/base.html' %}
+
+{% block title %}Quiz List{% endblock %}
+
+{% block content %}
+<div class="container vh-100 d-flex flex-column justify-content-center align-items-center text-dark" style="background-color: #87CEEB;">
+    <h2 class="mb-4">Available Quizzes</h2>
+    {% if quizzes %}
+        <div class="row w-100 justify-content-center">
+            {% for quiz in quizzes %}
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-light text-dark shadow" style="border-radius: 15px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ quiz.title }}(click me)</h5>
+                            <a href="{% url 'quiz_view' quiz.id %}" class="btn btn-primary">Start Quiz</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning w-100 text-center" role="alert">
+            No quizzes available at the moment.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

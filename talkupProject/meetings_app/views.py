@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 # create views
 def index(request):
@@ -20,15 +21,39 @@ def register(request):
     return render(request, 'meetings_app/register.html')
 
 
+# def login_view(request):
+#     if request.method=="POST":
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+#         user = authenticate(request, username=email, password=password)
+#         print(user)
+#         if user is not None:
+#             auth_login(request, user)
+#             return redirect("dashboard")
+#         else:
+#             return render(request, 'meetings_app/login.html', {'error': "Invalid credentials. Please try again."})
+
+#     return render(request, 'meetings_app/login.html')
+
 def login_view(request):
-    if request.method=="POST":
+    users = User.objects.all()
+    for user in users:
+      print(user.username, user.email, user.is_staff, user.is_superuser)
+    if request.method == "POST":
         email = request.POST.get('email')
+        print(email)
         password = request.POST.get('password')
+        print(password)
         user = authenticate(request, username=email, password=password)
         print(user)
+
         if user is not None:
-            auth_login(request, user)
-            return redirect("dashboard")
+            auth_login(request, user)  # Log in the user
+            # Check if the user is an admin
+            if user.is_staff:  # Assuming 'is_staff' is used to designate admin users
+                return redirect("admin_dashboard")  # Redirect to admin dashboard
+            else:
+                return redirect("dashboard")  # Redirect to user dashboard
         else:
             return render(request, 'meetings_app/login.html', {'error': "Invalid credentials. Please try again."})
 

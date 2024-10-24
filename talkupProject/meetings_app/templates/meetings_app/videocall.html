@@ -40,13 +40,13 @@ window.onload = function () {
         // @param 3: Room ID
         // @param 4: User ID
         // @param 5: Username
-    const roomID = getUrlParams(window.location.href)['roomID'] || (Math.floor(Math.random() * 10000) + "");
-    const userID = Math.floor(Math.random() * 10000) + "";
-    const userName ="{{ name }}"
-    const appID = "your id";
-    const serverSecret = "your server secret";
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
-
+        const roomID = getUrlParams(window.location.href)['roomID'] || (Math.floor(Math.random() * 10000) + "");
+        const userID = Math.floor(Math.random() * 10000) + "";
+        const userName ="{{ name }}"
+        const appID = 177564458;
+        const serverSecret = "3cab8c9bf5c899a749e61069ec55b1bf";
+        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
+    
     
         const zp = ZegoUIKitPrebuilt.create(kitToken);
         zp.joinRoom({

@@ -6,4 +6,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include("meetings_app.urls")),
     path('board/',include("masterBoard.urls")),
+    path('quiz/',include("quiz_app.urls"))
 ]
